@@ -5,11 +5,12 @@ const {
 
 const fs = require('node:fs');
 
+global = false
+
 module.exports = (client) => {
     client.handleCommands = async (commandFolders, path) => {
         client.commandArray = [];
         for (folder of commandFolders) {
-            console.log(`path is ${path}, folder is ${folder}`)
             const commandFiles = fs.readdirSync(`${path}\\${folder}`).filter(file => file.endsWith('.js'));
 
             for (const file of commandFiles) {
@@ -34,11 +35,18 @@ module.exports = (client) => {
                 console.log(`Started refreshing ${client.commandArray.length} application (/) commands.`);
 
                 // The put method is used to fully refresh all commands in the guild with the current set
-                const data = await rest.put(
-                    Routes.applicationGuildCommands(process.env.CLIENT_ID, process.env.GUILD_ID), {
+                let data;
+                if (!global) {
+                    data = await rest.put(
+                        Routes.applicationGuildCommands(process.env.CLIENT_ID, process.env.GUILD_ID), {
+                            body: client.commandArray
+                        },
+                    );
+                } else if (global) {
+                    data = await rest.put(Routes.applicationCommands(process.env.CLIENT_ID), {
                         body: client.commandArray
-                    },
-                );
+                    })
+                }
 
                 console.log(`Successfully reloaded ${data.length} application (/) commands.`);
             } catch (error) {
