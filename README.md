@@ -15,8 +15,6 @@ A Discord bot that I am working on, completely open source!
 - /invite - Invite the bot to your own server
 ## Roadmap
 
-- Turn /server and /user outputs into pictures
-
 - /cat and /dog command for finding random cat and dog pictures (so cute :D)
 
 
