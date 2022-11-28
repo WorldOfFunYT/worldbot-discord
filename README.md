@@ -17,8 +17,10 @@ A Discord bot that I am working on, completely open source!
 #### Tools
 
 - /database - Upload server data to database
-- /youtube url - Change youtube channel id for notifications
-- /youtube notify - Choose if you want notifications about new youtube uploads
+- /youtube notify - Choose if you want notifications about new Youtube uploads
+- /youtube channel - Change Youtube channel ID for notifications
+- /youtube messagechannel - Choose what Discord channel to put notifications in
+- /youtube info - Display info about Youtube notification settings
 
 ### Other
 

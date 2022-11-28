@@ -1,4 +1,6 @@
-const { SlashCommandBuilder } = require("discord.js");
+const Guild = require("../../schemas/guild");
+const mongoose = require("mongoose");
+const { SlashCommandBuilder, channelLink } = require("discord.js");
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -7,7 +9,7 @@ module.exports = {
     .setDefaultMemberPermissions(0)
     .addSubcommand((subcommand) =>
       subcommand
-        .setName("url")
+        .setName("channel")
         .setDescription("Set Youtube channel ID")
         .addStringOption((option) =>
           option.setName("id").setDescription("Youtube channel ID")
@@ -20,16 +22,74 @@ module.exports = {
         .addBooleanOption((option) =>
           option.setName("send").setDescription("Send notifications?")
         )
+    )
+    .addSubcommand((subcommand) =>
+      subcommand
+        .setName("messagechannel")
+        .setDescription("Set a youtube notification channel")
+        .addChannelOption((option) =>
+          option
+            .setName("channel")
+            .setDescription("The channel to send notifications to")
+        )
+    )
+    .addSubcommand((subcommand) =>
+      subcommand
+        .setName("info")
+        .setDescription("Show info about the youtube notification settings")
     ),
   async execute(interaction) {
-    if (interaction.options.getSubcommand() === "url") {
+    let guildProfile = await Guild.findOne({ guildId: interaction.guild.id });
+    if (!guildProfile) {
+      guildProfile = await new Guild({
+        _id: mongoose.Types.ObjectId(),
+        guildId: interaction.guild.id,
+        guildName: interaction.guild.name,
+        guildIcon: interaction.guild.iconURL()
+          ? interaction.guild.iconURL()
+          : "None",
+        youtubePosts: false,
+        youtubeMessageChannelId: "",
+        youtubeID: "",
+        recentYoutubeUpload: "",
+      });
+    }
+    if (interaction.options.getSubcommand() === "channel") {
+      guildProfile.youtubeID = interaction.options.getString("id");
+
+      if (!guildProfile.youtubePosts) {
+        guildProfile.youtubePosts = true;
+        await interaction.reply(
+          `Set the ID to "${guildProfile.youtubeID}" and turned on Youtube messages`
+        );
+      } else {
+        await interaction.reply(`Set the ID to "${guildProfile.youtubeID}"`);
+      }
+    } else if (interaction.options.getSubcommand() === "notify") {
+      guildProfile.youtubePosts = interaction.options.getBoolean("send");
+      if (guildProfile.youtubePosts) {
+        await interaction.reply(`Turned on Youtube messages`);
+      } else {
+        await interaction.reply(`Turned off Youtube messages`);
+      }
+    } else if (interaction.options.getSubcommand() === "messagechannel") {
+      guildProfile.youtubeMessageChannelId =
+        interaction.options.getChannel("channel").id;
+      if (!guildProfile.youtubePosts) {
+        guildProfile.youtubePosts = true;
+        await interaction.reply(
+          `Set the channel ID to "<#${guildProfile.youtubeMessageChannelId}>" and turned on Youtube messages`
+        );
+      } else {
+        await interaction.reply(
+          `Set the channel ID to "${guildProfile.youtubeMessageChannelId}"`
+        );
+      }
+    } else if (interaction.options.getSubcommand() === "info") {
       await interaction.reply(
-        "Nothing happened, because I haven't implemented function, but you used the /youtube url command"
-      );
-    } else if (interaction.options.getSubcommand() == "notify") {
-      await interaction.reply(
-        "Nothing happened, because I haven't implemented function, but you used the /youtube notify command"
+        `Youtube channel: https://www.youtube.com/channel/${guildProfile.youtubeURL}`
       );
     }
+    await guildProfile.save().catch(console.error);
   },
 };
