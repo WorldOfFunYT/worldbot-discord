@@ -54,7 +54,7 @@ function roundRect(ctx, x, y, width, height, radius, fill, stroke) {
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('user')
-		.setDescription('Provides information about the user.')
+		.setDescription('Provides information about chosen user.')
 		.addUserOption(option => option
 			.setName('user')
 			.setDescription('The user to get information about')),
