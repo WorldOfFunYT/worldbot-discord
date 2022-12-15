@@ -1,5 +1,5 @@
 const fs = require("fs");
-const path = require("node:path");
+const path = require("path");
 const { Client, Events, GatewayIntentBits, Collection } = require("discord.js");
 const dotenv = require("dotenv");
 dotenv.config();
