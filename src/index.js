@@ -1,4 +1,4 @@
-const fs = require("node:fs");
+const fs = require("fs");
 const path = require("node:path");
 const { Client, Events, GatewayIntentBits, Collection } = require("discord.js");
 const dotenv = require("dotenv");

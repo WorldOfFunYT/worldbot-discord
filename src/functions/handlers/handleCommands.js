@@ -1,6 +1,6 @@
 const { REST, Routes } = require("discord.js");
 
-const fs = require("node:fs");
+const fs = require("fs");
 
 global = process.env.IS_GLOBAL;
 
