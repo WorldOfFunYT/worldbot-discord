@@ -10,11 +10,11 @@ module.exports = (client) => {
         client.commandArray = [];
         for (folder of commandFolders) {
             const commandFiles = fs
-                .readdirSync(`${__dirname}\\..\\..\\commands\\${folder}`)
+                .readdirSync(`${__dirname}/../../commands/${folder}`)
                 .filter((file) => file.endsWith(".js"));
 
             for (const file of commandFiles) {
-                const command = require(`${__dirname}\\..\\..\\commands\\${folder}/${file}`);
+                const command = require(`${__dirname}/../../commands/${folder}/${file}`);
                 // Set a new item in the Collection with the key as the command name and the value as the exported module
                 if ("data" in command && "execute" in command) {
                     client.commands.set(command.data.name, command);
