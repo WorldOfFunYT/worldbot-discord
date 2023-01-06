@@ -13,6 +13,8 @@ A Discord bot that I am working on, completely open source!
 - /server - Information about the server you are in
 - /user - Information about when you joined the server
 - /invite - Invite the bot to your own server
+- /skyblock card - Generates a card with some basic information about a Hypixel Skyblock player
+- /skyblock profiles - Generates a card listing all profiles from the selected Hypixel Skyblock player
 
 #### Tools
 
